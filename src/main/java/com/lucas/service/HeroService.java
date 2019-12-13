@@ -23,9 +23,18 @@ public class HeroService {
 		return heroRepository.findById(id);
 	}
 
-	public boolean saveHero(Hero hero) {
+	public boolean save(Hero hero) {
 		heroRepository.save(hero);
 		return true;
 	}
 
+	public Hero add(Hero hero) {
+		return heroRepository.save(hero);
+	}
+
+	public boolean delete(Integer id) {
+		heroRepository.deleteById(id);
+		return true;
+	}
+	
 }

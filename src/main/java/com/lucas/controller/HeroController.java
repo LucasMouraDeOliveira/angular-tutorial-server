@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +44,7 @@ public class HeroController {
 	
 	@PutMapping
 	public ResponseEntity<Void> updateHero(@RequestBody Hero hero) {
-		if(heroService.saveHero(hero)) {
+		if(heroService.save(hero)) {
 			return ResponseEntity.ok().build();
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,7 +52,16 @@ public class HeroController {
 	
 	@PostMapping
 	public ResponseEntity<Hero> addHero(@RequestBody Hero hero) {
-		if(heroService.saveHero(hero)) {
+		Hero newHero = heroService.add(hero);
+		if(newHero != null) {
+			return ResponseEntity.ok(newHero);
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@DeleteMapping(path = "{id}")
+	public ResponseEntity<Void> deleteHero(@PathVariable Integer id) {
+		if(heroService.delete(id)) {
 			return ResponseEntity.ok().build();
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
