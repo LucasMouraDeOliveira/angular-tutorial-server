@@ -2,6 +2,9 @@ package com.lucas.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,6 +68,14 @@ public class HeroController {
 			return ResponseEntity.ok().build();
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping(path = "/find")
+	public ResponseEntity<List<Hero>> findHeroes(@PathParam("name") String name) {
+		List<Hero> heroes = this.heroService.findAll().stream()
+				.filter(h -> h.getName().contains(name))
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(heroes);
 	}
 
 }
